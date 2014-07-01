@@ -21,13 +21,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     public MyDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
-        Log.i("MyDatabaseHelper:", "Constructor is called");
     }
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-		Log.i("MyDatabaseHelper.java", "onCreate called");
 	    db.execSQL(CREATE_TABLE_SQL);
 	}
 

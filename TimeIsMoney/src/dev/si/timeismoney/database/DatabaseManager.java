@@ -16,15 +16,11 @@ public class DatabaseManager {
     private final String TABLE_NAME = "AppLog";
 
     public DatabaseManager(Context context) {
-        Log.i("Databasemanager.java", "Databasemanager constructor is called");
         this.dbHelper = new MyDatabaseHelper(context);
         this.db = dbHelper.getWritableDatabase();
-        Log.i("Databasemanager.java", "Databasemanager constructor is finished");
     }
 
     public String[] appNames() {
-        Log.i("DEBUG", "appNames() called .");
-
         List<String> result = new ArrayList<String>();
         try {
             Cursor cursor = db.query(TABLE_NAME, new String[]{"appName"}, null, null, null, null, "appID");
@@ -42,6 +38,7 @@ public class DatabaseManager {
     }
 
     public int select(String appName, String column) {
+    	db = dbHelper.getReadableDatabase();
         String[] cols = {column};
         String whereClause = "appName = ?";
         String whereArgs[] = { appName };
@@ -49,16 +46,17 @@ public class DatabaseManager {
 
         try {
             Cursor cursor = db.query(TABLE_NAME, cols, whereClause, whereArgs, null, null, null, null);
+        	// Cursor cursor = db.query(TABLE_NAME, cols, null, null, null, null, null, null);
             if (cursor.moveToFirst()) {
                 result = cursor.getInt(0);
             } else {
                 Log.i("SELECT ::", "SELECT Failed");
-                result = 0;
+                result = -1;
             }
         } finally {
-
+        	
         }
-
+        db = dbHelper.getWritableDatabase();
         return result;
     }
 
@@ -85,14 +83,17 @@ public class DatabaseManager {
         ContentValues values = new ContentValues();
         values.put(column, value);
         String whereClause = "appName = ?";
-        String whereArgs[] = { appName };
-
+        String whereArgs[] = new String[1];
+        whereArgs[0] = appName;
+        Log.i("Database appName::", appName);
         int result;
         try {
             result = db.update(TABLE_NAME, values, whereClause, whereArgs);
+        	// result = db.update(TABLE_NAME, values, null, null);
         } finally {
-
+        
         }
+        Log.i("DATABASE UPDATE:", String.valueOf(result));
 
         if (result == -1) {
             Log.i("Database Message" , "Update Failed");

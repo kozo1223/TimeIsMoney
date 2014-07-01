@@ -23,7 +23,6 @@ public class SimpleService extends Service {
     private Thread mThread;
 
     private String[] managedAppNames;
-    // private int[] managedAppTimes = {0, 0, 0}; // demo
     private int managedAppLog;
     private boolean isPrevManaged;
     private String currentApp;
@@ -119,8 +118,6 @@ public class SimpleService extends Service {
         return dbManager.appNames();
     }
 
-
-
     /**
      * アプリ名からアプリの一回の使用時間制限を取得
      *
@@ -178,7 +175,7 @@ public class SimpleService extends Service {
             default:
                 break;
         }
-        Log.i("TEST Usagetime", String.valueOf(this.getUsageTime(appName)));
+        Log.i("TEST updated", String.valueOf(this.getUsageTime(appName)));
     }
 
     /**
@@ -254,7 +251,7 @@ public class SimpleService extends Service {
         super.onCreate();
         // 初期化
         this.dbManager = new DatabaseManager(getApplicationContext());
-        this.managedAppNames = this.getManagedAppInfo();
+        
         this.managedAppLog = 0;
         this.currentApp = "";
         this.prevApp = "";
@@ -263,6 +260,11 @@ public class SimpleService extends Service {
         this.isPrevManaged = false;
         this.pastLog = 0;
         this.utils = new MyUtils();
+        
+        // dbManager.insert("com.android.email", 20, 60);
+        // dbManager.insert("com.android.calendar", 20, 60);
+        
+        this.managedAppNames = this.getManagedAppInfo();
     }
 
     @Override
@@ -291,7 +293,7 @@ public class SimpleService extends Service {
     private void showResult() {
         Log.i(TAG, "result");
         for (String app : managedAppNames) {
-            Log.i(TAG, String.valueOf(getUsageTime(app)));
+            Log.i(app, String.valueOf(getUsageTime(app)));
         }
     }
 }

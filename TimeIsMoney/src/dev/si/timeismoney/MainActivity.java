@@ -1,6 +1,5 @@
 package dev.si.timeismoney;
 
-import dev.si.timeismoney.database.DatabaseManager;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -77,10 +76,6 @@ public class MainActivity extends Activity {
 
  // データベース作成　テスト用
     private void createDatabase() {
-        Log.i("MainActivity.java", "createDatabase is called");
-        DatabaseManager dbManager = new DatabaseManager(getApplicationContext());
-        dbManager.insert("email", 20, 60);
-        dbManager.insert("calendar", 20, 60);
-        dbManager.insert("myDevApp", 20, 60);
+
     }
 }
