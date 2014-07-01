@@ -1,10 +1,12 @@
 package dev.si.timeismoney;
 
+import dev.si.timeismoney.database.DatabaseManager;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +20,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        createDatabase();
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
@@ -73,4 +75,12 @@ public class MainActivity extends Activity {
         stopService(i);
     }
 
+ // データベース作成　テスト用
+    private void createDatabase() {
+        Log.i("MainActivity.java", "createDatabase is called");
+        DatabaseManager dbManager = new DatabaseManager(getApplicationContext());
+        dbManager.insert("email", 20, 60);
+        dbManager.insert("calendar", 20, 60);
+        dbManager.insert("myDevApp", 20, 60);
+    }
 }
