@@ -20,6 +20,10 @@ public class DatabaseManager {
         this.db = dbHelper.getWritableDatabase();
     }
 
+    /**
+     * データベースに登録されているアプリの一覧を取得
+     * @return
+     */
     public String[] appNames() {
         List<String> result = new ArrayList<String>();
         try {
@@ -37,6 +41,12 @@ public class DatabaseManager {
         return (String[])result.toArray(new String[0]);
     }
 
+    /**
+     * データベースから値を得る
+     * @param appName
+     * @param column 取得したい項目
+     * @return
+     */
     public int select(String appName, String column) {
     	db = dbHelper.getReadableDatabase();
         String[] cols = {column};
@@ -59,26 +69,41 @@ public class DatabaseManager {
         db = dbHelper.getWritableDatabase();
         return result;
     }
-
+    /**
+     * データベースに挿入するメソッド
+     * @param appName アプリ名
+     * @param onceLimit　一回の上限
+     * @param dayLimit　一日の上限
+     */
     public void insert(String appName, int onceLimit, int dayLimit) {
         ContentValues values = new ContentValues();
         values.put("appName", appName);
         values.put("onceLimit", onceLimit);
         values.put("dayLimit", dayLimit);
-
-        long result;
-        try {
-            result = db.insert(TABLE_NAME, null, values);
-        } finally {
-
-        }
-        if (result == -1) {
-            Log.i("Database Message" , "Insert Failed");
+        if (select(appName, "onceLimit") == -1) {
+	        long result;
+	        try {
+	            result = db.insert(TABLE_NAME, null, values);
+	        } finally {
+	
+	        }
+	        if (result == -1) {
+	            Log.i("Database Message" , "Insert Failed");
+	        } else {
+	            Log.i("Database Message" , "Insert Success");
+	        }
         } else {
-            Log.i("Database Message" , "Insert Success");
+        	Log.i("INSERT ERROR", "Same name application exists");
+        	
         }
     }
 
+    /**
+     * データベース更新メソッド
+     * @param appName
+     * @param column
+     * @param value
+     */
     public void update(String appName, String column, int value) {
         ContentValues values = new ContentValues();
         values.put(column, value);

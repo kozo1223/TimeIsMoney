@@ -261,8 +261,8 @@ public class SimpleService extends Service {
         this.pastLog = 0;
         this.utils = new MyUtils();
         
-        // dbManager.insert("com.android.email", 20, 60);
-        // dbManager.insert("com.android.calendar", 20, 60);
+        dbManager.insert("com.android.email", 20, 60);
+        dbManager.insert("com.android.calendar", 20, 60);
         
         this.managedAppNames = this.getManagedAppInfo();
     }
