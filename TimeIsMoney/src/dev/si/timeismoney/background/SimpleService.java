@@ -22,16 +22,20 @@ public class SimpleService extends Service {
     private Handler mHandler = new Handler();
     private Thread mThread;
 
-    private String[] managedAppNames;
-    private int managedAppLog;
-    private boolean isPrevManaged;
-    private String currentApp;
-    private String prevApp;
+    private String[] managedAppNames; // アプリ一覧
+    private int dayLog; // 一日の使用時間
+    private int hourLog; // 時間帯の使用時間
+    private boolean isPrevManaged; // 前のアプリ名が測定アプリかどうか
+    private String currentApp; // 現在のアプリ名
+    private String prevApp; // 前のアプリ名
     private int onceLimit;
     private int dayLimit;
-    private int pastLog;
-    private MyUtils utils;
+    private int pastDayLog; // 起動時の一日の使用時間　一回の使用時間を計るため
 
+    private MyUtils utils;
+    private int currentWeek;
+    private int currentHour;
+    
     private DatabaseManager dbManager;
 
     private Runnable logTask = new Runnable() {
@@ -53,23 +57,46 @@ public class SimpleService extends Service {
 
                         ComponentName componentInfo = runningTaskInfo.get(0).topActivity;
                         currentApp = componentInfo.getPackageName();
+                        
+                        // 曜日、もしくは時間帯が変わったらデータ更新
+
+                        if (currentHour != utils.getHourOfDay()) {
+                        	currentHour = utils.getHourOfDay();
+                        	// 時間帯が変わったら時間帯のデータを0にする
+                            hourLog = 0;
+                            for (String app : managedAppNames) {
+                                setUsageHourLog(app, 0);
+                            }
+                        	
+                            if (currentWeek != utils.getDayOfWeek()) {
+                            	currentWeek = utils.getHourOfDay();
+                            	// 曜日が変わったら曜日のデータを0にする
+                            	dayLog = 0;
+                            	pastDayLog = 0;
+                            	for (String app : managedAppNames) {
+                                    setUsageDayLog(app, 0);
+                                }
+                            }
+                        }
 
                         // 前と同じアプリなら前が対象アプリのみ判定すればいい
                         if (currentApp.equals(prevApp)) {
                             if (isPrevManaged) {
                                 showText("DETECTED"); // demo
-                                managedAppLog += 3;
+                                dayLog += INTERVAL;	
+                                hourLog += INTERVAL;
 
                                 // 制限を超えていないかチェック
-                                checkDayAndAlert(managedAppLog, dayLimit); // 一日の制限を超えていないか
-                                checkOnceAndAlert(managedAppLog-pastLog, onceLimit);
+                                checkDayAndAlert(dayLog, dayLimit); // 一日の制限を超えていないか
+                                checkOnceAndAlert(dayLog-pastDayLog, onceLimit);
 
                             } else {
                             }
                         } else {
                             if (isPrevManaged) {
                                 // アプリが変わったのでデータを保存する
-                                setUsageTime(prevApp, managedAppLog);
+                                setUsageDayLog(prevApp, dayLog);
+                                setUsageHourLog(prevApp, hourLog);
                             } else {
                                 // アプリが変わったが前のアプリは測定対象ではないのでデータ保存は必要ない
                             }
@@ -83,12 +110,14 @@ public class SimpleService extends Service {
                                     // データ入れ替え
                                     onceLimit = getOnceLimit(appName);
                                     dayLimit = getDayLimit(appName);
-                                    managedAppLog = getUsageTime(appName);
-                                    pastLog = getUsageTime(appName);
+                                    dayLog = getUsageDayLog(appName);
+                                    pastDayLog = getUsageDayLog(appName);
+                                    hourLog = getUsageHourLog(appName);
 
-                                    managedAppLog += 3;
+                                    dayLog += INTERVAL;
+                                    hourLog += INTERVAL;
                                     // 制限を超えていないかチェック
-                                    checkDayAndAlert(managedAppLog, dayLimit);
+                                    checkDayAndAlert(dayLog, dayLimit);
 
                                     isPrevManaged = true;
                                     break;
@@ -147,35 +176,16 @@ public class SimpleService extends Service {
      * @param time 使用時間
      * @return void
      */
-    private void setUsageTime(String appName, int time) {
+    private void setUsageDayLog(String appName, int time) {
         // データベースへ保存
         int week = utils.getDayOfWeek();
-        switch (week) {
-            case 1:
-                dbManager.update(appName, "logSun", time);
-                break;
-            case 2:
-                dbManager.update(appName, "logMon", time);
-                break;
-            case 3:
-                dbManager.update(appName, "logTue", time);
-                break;
-            case 4:
-                dbManager.update(appName, "logWed", time);
-                break;
-            case 5:
-                dbManager.update(appName, "logThu", time);
-                break;
-            case 6:
-                dbManager.update(appName, "logFri", time);
-                break;
-            case 7:
-                dbManager.update(appName, "logSat", time);
-                break;
-            default:
-                break;
-        }
-        Log.i("TEST updated", String.valueOf(this.getUsageTime(appName)));
+        dbManager.update(appName, week2Col(week), time);
+        Log.i("TEST updated", String.valueOf(this.getUsageDayLog(appName)));
+    }
+    
+    private void setUsageHourLog(String appName, int time) {
+    	int hour = utils.getHourOfDay();
+        dbManager.update(appName, hour2Col(hour), time);
     }
 
     /**
@@ -184,45 +194,16 @@ public class SimpleService extends Service {
      * @param appName アプリ名
      * @return アプリの使用時間
      */
-    private int getUsageTime(String appName) {
+    private int getUsageDayLog(String appName) {
         // データベースから読み出す
-        int log = 0;
-
         int week = utils.getDayOfWeek();
-        switch (week) {
-            case 1:
-                Log.i("WEEK:", "Sunday");
-                log = dbManager.select(appName, "logSun");
-                break;
-            case 2:
-                Log.i("WEEK:", "Monday");
-                log = dbManager.select(appName, "logMon");
-                break;
-            case 3:
-                Log.i("WEEK:", "Tuesday");
-                log = dbManager.select(appName, "logTue");
-                break;
-            case 4:
-                Log.i("WEEK:", "Wednesday");
-                log = dbManager.select(appName, "logWed");
-                break;
-            case 5:
-                Log.i("WEEK:", "Thursday");
-                log = dbManager.select(appName, "logThu");
-                break;
-            case 6:
-                Log.i("WEEK:", "Friday");
-                log = dbManager.select(appName, "logFri");
-                break;
-            case 7:
-                Log.i("WEEK:", "Saturday");
-                log = dbManager.select(appName, "logSat");
-                break;
-            default:
-                break;
-        }
-
-        return log;
+        // Log.i("WEEK:", week2Col(week));
+        return dbManager.select(appName, week2Col(week));
+    }
+    
+    private int getUsageHourLog(String appName) {
+    	int hour = utils.getHourOfDay();
+    	return dbManager.select(appName, hour2Col(hour));
     }
 
     private void alert(String message) {
@@ -245,6 +226,50 @@ public class SimpleService extends Service {
         } else {
         }
     }
+    
+    /**
+     * 
+     * @param week
+     * @return
+     */
+    private String week2Col(int week) {
+    	String result = "";
+    	switch (week) {
+        	case 1:
+	            result = "logSun";
+	            break;
+	        case 2:
+	        	result = "logMon";
+	        	break;
+	        case 3:
+	        	result = "logTue";
+	            break;
+	        case 4:
+	        	result = "logWed";
+	            break;
+	        case 5:
+	        	result = "logThu";
+	            break;
+	        case 6:
+	        	result = "logFri";
+	            break;
+	        case 7:
+	        	result = "logSat";
+	            break;
+	        default:
+	            break;
+	    }
+    	return result;
+    }
+    
+    /**
+     * 
+     * @param hour
+     * @return
+     */
+    private String hour2Col(int hour) {
+    	return "logDay_"+String.valueOf(hour);
+    }
 
     @Override
     public void onCreate() {
@@ -252,14 +277,17 @@ public class SimpleService extends Service {
         // 初期化
         this.dbManager = new DatabaseManager(getApplicationContext());
         
-        this.managedAppLog = 0;
+        this.dayLog = 0;
+        this.hourLog = 0;
         this.currentApp = "";
         this.prevApp = "";
         this.onceLimit = 0;
         this.dayLimit = 0;
         this.isPrevManaged = false;
-        this.pastLog = 0;
+        this.pastDayLog = 0;
         this.utils = new MyUtils();
+        this.currentWeek = this.utils.getDayOfWeek();
+        this.currentHour = this.utils.getHourOfDay();
         
         dbManager.insert("com.android.email", 20, 60);
         dbManager.insert("com.android.calendar", 20, 60);
@@ -291,9 +319,14 @@ public class SimpleService extends Service {
     }
 
     private void showResult() {
-        Log.i(TAG, "result");
+        Log.i(TAG, "result day:");
         for (String app : managedAppNames) {
-            Log.i(app, String.valueOf(getUsageTime(app)));
+            Log.i(app, String.valueOf(getUsageDayLog(app)));
+        }
+        
+        Log.i(TAG, "result hour:");
+        for (String app : managedAppNames) {
+            Log.i(app, String.valueOf(getUsageDayLog(app)));
         }
     }
 }
