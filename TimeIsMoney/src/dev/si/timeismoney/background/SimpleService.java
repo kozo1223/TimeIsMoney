@@ -52,6 +52,7 @@ public class SimpleService extends Service {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
+                    	// 現在起動中のアプリ名を取得
                         ActivityManager manager = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
                         List< ActivityManager.RunningTaskInfo > runningTaskInfo = manager.getRunningTasks(1);
 
@@ -59,23 +60,26 @@ public class SimpleService extends Service {
                         currentApp = componentInfo.getPackageName();
                         
                         // 曜日、もしくは時間帯が変わったらデータ更新
-
                         if (currentHour != utils.getHourOfDay()) {
-                        	currentHour = utils.getHourOfDay();
-                        	// 時間帯が変わったら時間帯のデータを0にする
-                            hourLog = 0;
                             for (String app : managedAppNames) {
-                                setUsageHourLog(app, 0);
+                            	// 現在保存している　hourLogの値を保存する
+                            	// 次の時間帯のデータを0にする
+                            	setUsageHourLog(currentHour, app, hourLog);
+                                setUsageHourLog((currentHour+1)%24, app, 0);
                             }
-                        	
+                            currentHour = utils.getHourOfDay();
+                            hourLog = 0;
+                            
                             if (currentWeek != utils.getDayOfWeek()) {
+                            	for (String app : managedAppNames) {
+                                	// 現在保存している dayLogの値を保存する
+                                	// 次の曜日のデータを0にする
+                            		setUsageDayLog(currentWeek, app, dayLog);
+                            		setUsageDayLog(currentWeek%7+1, app, 0);
+                                }
                             	currentWeek = utils.getHourOfDay();
-                            	// 曜日が変わったら曜日のデータを0にする
                             	dayLog = 0;
                             	pastDayLog = 0;
-                            	for (String app : managedAppNames) {
-                                    setUsageDayLog(app, 0);
-                                }
                             }
                         }
 
@@ -94,9 +98,10 @@ public class SimpleService extends Service {
                             }
                         } else {
                             if (isPrevManaged) {
+                            	// Log.i("Minute test, ", String.valueOf(utils.getMinute()));
                                 // アプリが変わったのでデータを保存する
-                                setUsageDayLog(prevApp, dayLog);
-                                setUsageHourLog(prevApp, hourLog);
+                                setUsageDayLog(currentWeek, prevApp, dayLog);
+                                setUsageHourLog(currentHour, prevApp, hourLog);
                             } else {
                                 // アプリが変わったが前のアプリは測定対象ではないのでデータ保存は必要ない
                             }
@@ -170,21 +175,24 @@ public class SimpleService extends Service {
     }
 
     /**
-     * アプリの使用時間を保存
-     *
+     * アプリの一日の使用時間を保存
+     * @param week 保存したい曜日
      * @param appName アプリ名
      * @param time 使用時間
+     *
      * @return void
      */
-    private void setUsageDayLog(String appName, int time) {
-        // データベースへ保存
-        int week = utils.getDayOfWeek();
+    private void setUsageDayLog(int week, String appName, int time) {
         dbManager.update(appName, week2Col(week), time);
-        Log.i("TEST updated", String.valueOf(this.getUsageDayLog(appName)));
     }
     
-    private void setUsageHourLog(String appName, int time) {
-    	int hour = utils.getHourOfDay();
+    /**
+     * アプリの時間帯の使用時間を保存
+     * @param hour
+     * @param appName
+     * @param time
+     */
+    private void setUsageHourLog(int hour, String appName, int time) {
         dbManager.update(appName, hour2Col(hour), time);
     }
 
@@ -192,7 +200,7 @@ public class SimpleService extends Service {
      * アプリ名から当日の使用時間を取得
      *
      * @param appName アプリ名
-     * @return アプリの使用時間
+     * @return 一日のアプリの使用時間
      */
     private int getUsageDayLog(String appName) {
         // データベースから読み出す
@@ -201,6 +209,11 @@ public class SimpleService extends Service {
         return dbManager.select(appName, week2Col(week));
     }
     
+    /**
+     * 
+     * @param appName アプリ名
+     * @return 時間帯のアプリの使用時間
+     */
     private int getUsageHourLog(String appName) {
     	int hour = utils.getHourOfDay();
     	return dbManager.select(appName, hour2Col(hour));
@@ -315,7 +328,6 @@ public class SimpleService extends Service {
         // dbManager.delTable();
         this.isActive = false;
         this.mThread.interrupt();
-
     }
 
     private void showResult() {
@@ -326,7 +338,7 @@ public class SimpleService extends Service {
         
         Log.i(TAG, "result hour:");
         for (String app : managedAppNames) {
-            Log.i(app, String.valueOf(getUsageDayLog(app)));
+            Log.i(app, String.valueOf(getUsageHourLog(app)));
         }
     }
 }

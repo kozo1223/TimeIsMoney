@@ -7,15 +7,21 @@ public class MyUtils {
     private Calendar cal;
 
     public MyUtils() {
-        cal = Calendar.getInstance();
     }
 
     public int getDayOfWeek() {
+    	cal = Calendar.getInstance();
         return cal.get(Calendar.DAY_OF_WEEK);
     }
     
     public int getHourOfDay() {
+    	cal = Calendar.getInstance();
     	return cal.get(Calendar.HOUR_OF_DAY);
+    }
+    
+    public int getMinute() {
+    	cal = Calendar.getInstance();
+    	return cal.get(Calendar.MINUTE);
     }
     
 }
