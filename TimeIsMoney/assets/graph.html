@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>detail</title>
+    <script type = "text/javascript" src="file:///android_asset/Chart.js"></script>
+</head>
+<body>
+    <canvas id="line" height="450" width="600"></canvas>
+    <script type="text/javascript">
+
+            function showChart(sun, mon, tue, wed, thu, fri, sat) {
+                var lineChartData = {
+                    labels : ["Sunday", "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+                    datasets : [
+                        {
+                            fillColor : "rgba(166, 227, 157, 0.5)",
+                            strokeColor : "rgba(166, 227, 157, 1)",
+                            pointColor : "rgba(166, 227, 157, 1)",
+                            pointStrokeColor : "#fff",
+                            data : [sun,mon,tue,wed,thu,fri,sat]
+                        }
+                    ]
+                }
+                new Chart(document.getElementById("line").getContext("2d")).Line(lineChartData,{
+	                                                                                scaleOverlay : false,
+	                                                                                scaleOverride : true,
+                                                                                    scaleSteps : 7,
+                                                                                    scaleStepWidth : 10,
+                                                                                    scaleStartValue : null,
+                                                                                    scaleLineColor : "#ccc",
+                                                                                    scaleLineWidth : 1,
+                                                                                    scaleShowLabels : true,
+                });
+            }
+
+            window.onload = function() {
+                location.href = "app-tim-callback://test";
+            }
+    </script>
+</body>
+</html>
