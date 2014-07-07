@@ -25,7 +25,14 @@
             </intent-filter>
             
         </activity>
+        <activity android:name=".main.AppDetailActivity"></activity>
         <service android:name="dev.si.timeismoney.background.SimpleService" />
+        <activity
+                android:name=".background.CallDialogActivity"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                android:launchMode="singleInstance">
+        </activity>
+
     </application>
 
 </manifest>

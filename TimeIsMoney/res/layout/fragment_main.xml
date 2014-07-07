@@ -26,6 +26,14 @@
         android:layout_height="wrap_content"
         android:onClick="onStopClick"
         android:text="StopButton" />
+    
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Graph"
+        android:onClick="onGraphClick"
+        android:id="@+id/btnGraph" android:layout_gravity="center_horizontal"/>
+    
 
 	</LinearLayout>
     

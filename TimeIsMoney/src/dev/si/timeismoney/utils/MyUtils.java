@@ -24,4 +24,33 @@ public class MyUtils {
     	return cal.get(Calendar.MINUTE);
     }
     
+    public String week2Col(int week) {
+        String result = "";
+        switch (week) {
+            case 1:
+                result = "logSun";
+                break;
+            case 2:
+                result = "logMon";
+                break;
+            case 3:
+                result = "logTue";
+                break;
+            case 4:
+                result = "logWed";
+                break;
+            case 5:
+                result = "logThu";
+                break;
+            case 6:
+                result = "logFri";
+                break;
+            case 7:
+                result = "logSat";
+                break;
+            default:
+                break;
+        }
+        return result;
+    }
 }

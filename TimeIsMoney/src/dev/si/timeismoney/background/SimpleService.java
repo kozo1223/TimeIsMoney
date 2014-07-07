@@ -52,12 +52,8 @@ public class SimpleService extends Service {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                    	// 現在起動中のアプリ名を取得
-                        ActivityManager manager = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
-                        List< ActivityManager.RunningTaskInfo > runningTaskInfo = manager.getRunningTasks(1);
 
-                        ComponentName componentInfo = runningTaskInfo.get(0).topActivity;
-                        currentApp = componentInfo.getPackageName();
+                        currentApp = getCurrentApp();
                         
                         // 曜日、もしくは時間帯が変わったらデータ更新
                         if (currentHour != utils.getHourOfDay()) {
@@ -138,6 +134,15 @@ public class SimpleService extends Service {
             }
         }
     };
+
+    private String getCurrentApp() {
+        // 現在起動中のアプリ名を取得
+        ActivityManager manager = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
+        List< ActivityManager.RunningTaskInfo > runningTaskInfo = manager.getRunningTasks(1);
+
+        ComponentName componentInfo = runningTaskInfo.get(0).topActivity;
+        return componentInfo.getPackageName();
+    }
 
     private void showText(String text) {
         Toast.makeText(this, TAG + text, Toast.LENGTH_SHORT).show();
@@ -223,6 +228,9 @@ public class SimpleService extends Service {
         // 使用時間が過ぎていることを警告
         // TODO
         Log.i("AlertTest", message);
+        Intent intent = new Intent(getApplicationContext(),CallDialogActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     private void checkDayAndAlert(int time, int limit) {
@@ -331,6 +339,7 @@ public class SimpleService extends Service {
     }
 
     private void showResult() {
+        Log.i(TAG, String.valueOf(currentWeek));
         Log.i(TAG, "result day:");
         for (String app : managedAppNames) {
             Log.i(app, String.valueOf(getUsageDayLog(app)));

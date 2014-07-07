@@ -19,7 +19,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        createDatabase();
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
@@ -73,9 +72,10 @@ public class MainActivity extends Activity {
         Intent i = new Intent(this, dev.si.timeismoney.background.SimpleService.class);
         stopService(i);
     }
-
- // データベース作成　テスト用
-    private void createDatabase() {
-
+    
+    public void onGraphClick(View view) {
+        Intent i = new Intent(this, dev.si.timeismoney.main.AppDetailActivity.class);
+        startActivity(i);
     }
+
 }
