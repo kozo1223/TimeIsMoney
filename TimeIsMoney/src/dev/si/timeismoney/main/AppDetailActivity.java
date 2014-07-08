@@ -43,7 +43,12 @@ public class AppDetailActivity extends Activity {
         int time = dbManager.select(appName, utils.week2Col(week));
         return String.valueOf(time);
     }
-
+    
+    private String getLogHour(String appName, int hour) {
+    	int time = dbManager.select(appName, utils.hour2Col(hour));
+    	return String.valueOf(time);
+    }
+    
     private void executeJavaScriptFunction(String appName) {
         String sun = getLogTime(appName, 1);
         String mon = getLogTime(appName, 2);
@@ -55,7 +60,6 @@ public class AppDetailActivity extends Activity {
         final String script = "javascript:var myLine = showChart(%s,%s,%s,%s,%s,%s,%s);";
         this.myWebView.loadUrl(String.format(script, sun, mon, tue, wed, thu, fri, sat));
     }
-
 
     private boolean checkCallbackUrl(String url) {
         final String callbacScheme = "app-tim-callback://";

@@ -8,6 +8,25 @@ public class MyUtils {
 
     public MyUtils() {
     }
+    
+    public int getMonth() {
+    	cal = Calendar.getInstance();
+    	return cal.get(Calendar.MONTH);
+    }
+    
+    public int month2MonthLength(int month) {
+    	if (month == 2 || month == 4 || month == 6
+    			|| month == 9 || month == 11) {
+    		return 30;
+    	} else {
+    		return 31;
+    	}
+    }
+    
+    public int getDayOfMonth() {
+    	cal = Calendar.getInstance();
+    	return cal.get(Calendar.DAY_OF_MONTH);
+    }
 
     public int getDayOfWeek() {
     	cal = Calendar.getInstance();
@@ -52,5 +71,9 @@ public class MyUtils {
                 break;
         }
         return result;
+    }
+    
+    public String hour2Col(int hour) {
+    	return "logDay_"+String.valueOf(hour);
     }
 }

@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 import dev.si.timeismoney.database.DatabaseManager;
+import dev.si.timeismoney.database.PreferencesManager;
 import dev.si.timeismoney.utils.MyUtils;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class SimpleService extends Service {
     private int currentHour;
     
     private DatabaseManager dbManager;
+    private PreferencesManager prefManager;
 
     private Runnable logTask = new Runnable() {
         @Override
@@ -296,9 +298,13 @@ public class SimpleService extends Service {
     public void onCreate() {
         super.onCreate();
         // 初期化
-        this.dbManager = new DatabaseManager(getApplicationContext());
-        
-        this.dayLog = 0;
+        initVariables();
+        initDatabase();
+    }
+    
+    private void initVariables() {
+    	this.dbManager = new DatabaseManager(getApplicationContext());
+    	this.dayLog = 0;
         this.hourLog = 0;
         this.currentApp = "";
         this.prevApp = "";
@@ -307,13 +313,86 @@ public class SimpleService extends Service {
         this.isPrevManaged = false;
         this.pastDayLog = 0;
         this.utils = new MyUtils();
-        this.currentWeek = this.utils.getDayOfWeek();
-        this.currentHour = this.utils.getHourOfDay();
-        
         dbManager.insert("com.android.email", 20, 60);
         dbManager.insert("com.android.calendar", 20, 60);
-        
-        this.managedAppNames = this.getManagedAppInfo();
+        this.currentWeek = this.utils.getDayOfWeek();
+        this.currentHour = this.utils.getHourOfDay();
+        this.prefManager = new PreferencesManager(getApplicationContext());
+        this.managedAppNames = this.getManagedAppInfo();              
+    }
+    
+    private void initDatabase() {
+    	int day = utils.getDayOfMonth();
+    	int week = utils.getDayOfWeek();
+    	int hour = utils.getHourOfDay();
+    	int prevDay = prefManager.getLastUsedDay();
+        int prevHour = prefManager.getLastUsedHour();
+        int prevMonth = prefManager.getLastUsedMonth();
+    	int prevMonthLength = utils.month2MonthLength(prevMonth);
+    	
+    	// pref から得た値が-1だったときの処理
+    	if (prevDay == -1 || prevHour == -1 || prevMonth == -1) {
+    		return;
+    	}
+    	
+    	if (day == prevDay) {
+    		// 前回終了した日にちと同じなら時間帯が同じかチェックする
+    		if (hour == prevHour) {
+    			// 日にちが同じで時間帯が同じならそのままデータベースから読み出せばよい
+    		} else {
+    			// 時間帯が異なるなら差分のデータを0にする
+    			setZeroHourDiff(hour-prevHour, hour);
+    		}
+    	} else {
+    		// 前回終了したときから日にちが離れていた場合、その間の日のデータを0にする
+    		// 7日以上離れていれば全曜日のデータを0にする
+    		int dayDiff = day - prevDay;
+    		
+    		if (dayDiff >= 7) {
+    			setZeroWeekAndHourAll();
+    		} else if (dayDiff > 0){
+    			// 月をまたがない場合
+    			setZeroWeekAndHourDiff(dayDiff, week);
+    		} else {
+    			// 月をまたぐ場合、差は負になる 2ヶ月以上またぐ場合は対応しない
+    			dayDiff += prevMonthLength;
+    			if (dayDiff >= 7) {
+    				setZeroWeekAndHourAll();
+    			} else {
+    				setZeroWeekAndHourDiff(dayDiff, week);
+    			}
+    		}
+    	}
+    }
+    
+    private void setZeroHourDiff(int diff, int hour) {
+    	for (String app : managedAppNames) {
+			for (int i = diff-1; i >= 0; i--) {
+				dbManager.update(app, hour2Col(hour-i), 0);
+			}
+		}
+    }
+    
+    private void setZeroWeekAndHourAll() {
+    	for (String app : managedAppNames) {
+			for (int i = 1; i <= 7; i++) {
+				dbManager.update(app, week2Col(i), 0);
+			}
+			for (int i = 0; i < 24; i++) {
+				dbManager.update(app, hour2Col(i), 0);
+			}
+		}
+    }
+    
+    private void setZeroWeekAndHourDiff(int dayDiff, int week) {
+    	for (String app : managedAppNames) {
+			for (int i = dayDiff-1; i >= 0; i--) {
+				dbManager.update(app, week2Col(week-i), 0);
+			}
+			for (int i = 0; i < 24; i++) {
+				dbManager.update(app, hour2Col(i), 0);
+			}
+		}
     }
 
     @Override
@@ -333,9 +412,17 @@ public class SimpleService extends Service {
     public void onDestroy() {
         super.onDestroy();
         showResult();
+        setDestroyInfo();
         // dbManager.delTable();
         this.isActive = false;
         this.mThread.interrupt();
+    }
+    
+    private void setDestroyInfo() {
+    	prefManager.setLastUsedMonth(utils.getMonth());
+    	prefManager.setLastUsedDay(utils.getDayOfMonth());
+    	prefManager.setLastUsedWeek(currentWeek);
+    	prefManager.setLastUsedHour(currentHour);
     }
 
     private void showResult() {
