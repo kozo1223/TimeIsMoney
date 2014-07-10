@@ -2,6 +2,7 @@ package dev.si.timeismoney.main;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import dev.si.timeismoney.R;
@@ -49,8 +50,23 @@ public class AppDetailActivity extends Activity {
     	return String.valueOf(time);
     }
     
-    private void executeJavaScriptFunction(String appName) {
+    private void executeShowGraphOfWeek(String appName) {
         String sun = getLogTime(appName, 1);
+        String mon = getLogTime(appName, 2);
+        String tue = getLogTime(appName, 3);
+        String wed = getLogTime(appName, 4);
+        String thu = getLogTime(appName, 5);
+        String fri = getLogTime(appName, 6);
+        String sat = getLogTime(appName, 7);
+        final String script = "javascript:var myLine = showChart(%s,%s,%s,%s,%s,%s,%s);";
+        this.myWebView.loadUrl(String.format(script, sun, mon, tue, wed, thu, fri, sat));
+    }
+    
+    private void executeShowGraphOfHour(String appName) {
+    	for (int i = 0; i < 24; i++) {
+    		Log.i(appName + ", " + String.valueOf(i), getLogHour(appName, i));
+    	}
+    	String sun = getLogTime(appName, 1);
         String mon = getLogTime(appName, 2);
         String tue = getLogTime(appName, 3);
         String wed = getLogTime(appName, 4);
@@ -62,11 +78,18 @@ public class AppDetailActivity extends Activity {
     }
 
     private boolean checkCallbackUrl(String url) {
+    	Log.i("in checkCallbackUrl", url);
         final String callbacScheme = "app-tim-callback://";
         if(!url.startsWith(callbacScheme)) {
             return false;
         }
-        executeJavaScriptFunction("com.android.email");
+        if (url.equals("app-tim-callback://week")) {
+        	executeShowGraphOfWeek("com.android.email");
+        } else if (url.equals("app-tim-callback://hour")) {
+        	executeShowGraphOfHour("com.android.email");
+        } else {
+        	executeShowGraphOfWeek("com.android.email");
+        }
         return true;
     }
 

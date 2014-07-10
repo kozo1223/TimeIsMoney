@@ -137,6 +137,10 @@ public class SimpleService extends Service {
         }
     };
 
+    /**
+     * 
+     * @return 現在起動中のアプリ名
+     */
     private String getCurrentApp() {
         // 現在起動中のアプリ名を取得
         ActivityManager manager = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
@@ -325,8 +329,11 @@ public class SimpleService extends Service {
     	int day = utils.getDayOfMonth();
     	int week = utils.getDayOfWeek();
     	int hour = utils.getHourOfDay();
+    	
     	int prevDay = prefManager.getLastUsedDay();
-        int prevHour = prefManager.getLastUsedHour();
+        int prevHour = prefManager.getLastUsedHour(); 
+    	
+    	// int prevHour = 10;
         int prevMonth = prefManager.getLastUsedMonth();
     	int prevMonthLength = utils.month2MonthLength(prevMonth);
     	

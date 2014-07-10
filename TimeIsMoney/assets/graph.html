@@ -7,7 +7,8 @@
 </head>
 <body>
     <canvas id="line" height="450" width="600"></canvas>
-    
+	<a href="app-tim-callback://week"><button>week</button></a>
+	<a href="app-tim-callback://hour"><button>hour</button></a>
     <script type="text/javascript">
 
             function showChart(sun, mon, tue, wed, thu, fri, sat) {
@@ -36,7 +37,7 @@
             }
             
             window.onload = function() {
-                location.href = "app-tim-callback://test";
+                location.href = "app-tim-callback://week";
             }
     </script>
 </body>
