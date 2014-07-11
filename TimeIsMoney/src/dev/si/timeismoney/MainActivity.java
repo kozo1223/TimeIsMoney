@@ -75,6 +75,7 @@ public class MainActivity extends Activity {
     
     public void onGraphClick(View view) {
         Intent i = new Intent(this, dev.si.timeismoney.main.AppDetailActivity.class);
+        i.putExtra("name", "com.android.email");
         startActivity(i);
     }
 

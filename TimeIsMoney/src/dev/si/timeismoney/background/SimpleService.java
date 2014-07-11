@@ -147,6 +147,7 @@ public class SimpleService extends Service {
         List< ActivityManager.RunningTaskInfo > runningTaskInfo = manager.getRunningTasks(1);
 
         ComponentName componentInfo = runningTaskInfo.get(0).topActivity;
+        Log.i("current app is ... ", componentInfo.getPackageName());
         return componentInfo.getPackageName();
     }
 
@@ -391,10 +392,14 @@ public class SimpleService extends Service {
 		}
     }
     
-    private void setZeroWeekAndHourDiff(int dayDiff, int week) {
+    private void setZeroWeekAndHourDiff(int dayDiff, int week) {    	
     	for (String app : managedAppNames) {
 			for (int i = dayDiff-1; i >= 0; i--) {
-				dbManager.update(app, week2Col(week-i), 0);
+				if (week - i > 0) {
+					dbManager.update(app, week2Col(week-i), 0);
+				} else {
+					dbManager.update(app, week2Col(7+(week-i)), 0);
+				}
 			}
 			for (int i = 0; i < 24; i++) {
 				dbManager.update(app, hour2Col(i), 0);
