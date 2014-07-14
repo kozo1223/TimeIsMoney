@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-public class ShowActivity extends Activity {
+public class TopActivity extends Activity {
 	
 	private ListView listView = null;
 	private CustomData itemData;
@@ -61,6 +61,8 @@ public class ShowActivity extends Activity {
              ApplicationInfo.FLAG_SYSTEM)
              continue;
              
+             // インストールされているアプリのみ表示
+            
         	
             if(ai.loadLabel(pm).toString()!=null){
                 //アプリ名取得
