@@ -9,9 +9,10 @@
     tools:context="dev.si.timeismoney.MainActivity$PlaceholderFragment" >
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:onClick="onShowApp"
+        android:orientation="vertical" >
 
     <Button
         android:layout_width="match_parent"
@@ -33,7 +34,13 @@
         android:text="Show Graph"
         android:onClick="onGraphClick"
         android:id="@+id/btnGraph" android:layout_gravity="center_horizontal"/>
-    
+
+    <Button
+        android:id="@+id/btnShowApp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onShowApp"
+        android:text="Show Application" />
 
 	</LinearLayout>
     
