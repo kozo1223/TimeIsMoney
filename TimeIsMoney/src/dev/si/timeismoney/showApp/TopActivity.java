@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.si.timeismoney.R;
+import dev.si.timeismoney.database.DatabaseManager;
 import android.support.v4.app.Fragment;
 import android.app.Activity;
 import android.content.Intent;
@@ -27,12 +28,16 @@ public class TopActivity extends Activity {
 	private CustomData itemData;
 	private Drawable icon = null;
 	private CustomAdapter customAdapater;
+    private DatabaseManager dbManager;
 	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	
+		this.dbManager = new DatabaseManager(getApplicationContext());
+
+	    String appNames[] = dbManager.appNames();
 	
 		setContentView(R.layout.listview);
 		
@@ -62,8 +67,14 @@ public class TopActivity extends Activity {
              continue;
              
              // インストールされているアプリのみ表示
-            
+             if (ai.packageName.equals("Time is money")) continue;
         	
+             for(String appName : appNames){
+         		
+         		if (!ai.loadLabel(pm).toString().equals(appName)) continue;
+         		
+         	
+             
             if(ai.loadLabel(pm).toString()!=null){
                 //アプリ名取得
                 itemData.setTextData(ai.loadLabel(pm).toString());
@@ -95,7 +106,8 @@ public class TopActivity extends Activity {
                     startActivity(intent);
                 }
             });
-           
+         
+             }
         }
         
         

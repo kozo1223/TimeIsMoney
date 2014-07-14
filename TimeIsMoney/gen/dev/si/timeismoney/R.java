@@ -25,12 +25,13 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int MyListView=0x7f080008;
-        public static final int action_settings=0x7f080009;
+        public static final int MyListView=0x7f080009;
+        public static final int action_settings=0x7f08000a;
         public static final int btnGraph=0x7f080006;
         public static final int btnShowApp=0x7f080007;
         public static final int btnStart=0x7f080004;
         public static final int btnStop=0x7f080005;
+        public static final int button1=0x7f080008;
         public static final int container=0x7f080001;
         public static final int image=0x7f080002;
         public static final int text=0x7f080003;

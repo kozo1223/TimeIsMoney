@@ -42,6 +42,13 @@
         android:onClick="onShowApp"
         android:text="Show Application" />
 
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onShowRegisterApp"
+        android:text="show Registered App" />
+
 	</LinearLayout>
     
 </RelativeLayout>

@@ -81,7 +81,9 @@ public class MainActivity extends Activity {
         Intent i = new Intent(this, dev.si.timeismoney.showApp.ShowActivity.class);
         startActivity(i);
     }
-    
-    
+    public void onShowRegisterApp(View view) {
+        Intent i = new Intent(this, dev.si.timeismoney.showApp.TopActivity.class);
+        startActivity(i);
+    }
 
 }

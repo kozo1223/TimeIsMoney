@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.si.timeismoney.R;
+import dev.si.timeismoney.database.DatabaseManager;
 import android.support.v4.app.Fragment;
 import android.app.Activity;
 import android.content.Intent;
@@ -27,12 +28,15 @@ public class ShowActivity extends Activity {
 	private CustomData itemData;
 	private Drawable icon = null;
 	private CustomAdapter customAdapater;
-	
+    private DatabaseManager dbManager;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	
+        this.dbManager = new DatabaseManager(getApplicationContext());
+
 	
 		setContentView(R.layout.listview);
 		
@@ -61,6 +65,13 @@ public class ShowActivity extends Activity {
              ApplicationInfo.FLAG_SYSTEM)
              continue;
              
+             // インストールされているアプリのみ表示
+             if (ai.loadLabel(pm).toString().equals("Time is Money")) continue;
+             
+             if (ai.loadLabel(pm).toString().equals("Simple")) continue;
+
+        	
+             
         	
             if(ai.loadLabel(pm).toString()!=null){
                 //アプリ名取得
@@ -88,9 +99,10 @@ public class ShowActivity extends Activity {
                 public void onItemClick(AdapterView<?> parent, View view,
                         int position, long id) {
                 	ApplicationInfo ai = list.get(position);
-                    Uri uri=Uri.fromParts("package",ai.packageName,null);
-                    Intent intent=new Intent(Intent.ACTION_DELETE,uri);
-                    startActivity(intent);
+                	dbManager.insert(ai.packageName,1,1);
+//                    Uri uri=Uri.fromParts("package",ai.packageName,null);
+//                    Intent intent=new Intent(Intent.ACTION_DELETE,uri);
+//                    startActivity(intent);
                 }
             });
            
