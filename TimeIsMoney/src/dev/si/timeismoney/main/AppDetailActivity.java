@@ -85,5 +85,4 @@ public class AppDetailActivity extends Activity implements OnClickListener {
 			break;
 		}
     }
-
 }
