@@ -147,21 +147,4 @@ public class DatabaseManager {
         }
 
     }
-    
-    public void delete2() {
-       
-        int result;
-        try {
-            result = db.delete(TABLE_NAME, null, null);
-        } finally {
-
-        }
-
-        if (result == -1) {
-            Log.i("Database Message" , "Delete Failed");
-        } else {
-            Log.i("Database Message" , "Delete Success");
-        }
-
-    }
 }

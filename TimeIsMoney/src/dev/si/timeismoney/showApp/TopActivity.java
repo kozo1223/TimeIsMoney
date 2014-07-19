@@ -35,7 +35,6 @@ public class TopActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		//データベース初期化
-        //dbManager.delete2();
 		
 		super.onCreate(savedInstanceState);
 		

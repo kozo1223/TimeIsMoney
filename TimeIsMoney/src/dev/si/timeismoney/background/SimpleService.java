@@ -68,7 +68,7 @@ public class SimpleService extends Service {
 					public void run() {
 
 						currentApp = getCurrentApp();
-						Log.i(TAG, currentApp);
+
 						// 曜日、もしくは時間帯が変わったらデータ更新
 						if (currentHour != utils.getHourOfDay()) {
 							for (String app : managedAppNames) {
@@ -123,8 +123,7 @@ public class SimpleService extends Service {
 							}
 						} else {
 							if (isPrevManaged) {
-								// Log.i("Minute test, ",
-								// String.valueOf(utils.getMinute()));
+								
 								// アプリが変わったのでデータを保存する
 								setUsageDayLog(currentWeek, prevApp, dayLog);
 								setUsageHourLog(currentHour, prevApp, hourLog);
@@ -137,7 +136,6 @@ public class SimpleService extends Service {
 							for (String appName : managedAppNames) {
 								if (currentApp.contains(appName)) {
 									showText("DETECTED"); // demo
-									Log.i("detecting ... :", appName); // demo
 
 									// データ入れ替え
 									onceLimit = getOnceLimit(appName);
@@ -383,7 +381,6 @@ public class SimpleService extends Service {
 	private int getUsageDayLog(String appName) {
 		// データベースから読み出す
 		int week = utils.getDayOfWeek();
-		// Log.i("WEEK:", week2Col(week));
 		return dbManager.select(appName, week2Col(week));
 	}
 	/**
@@ -398,8 +395,6 @@ public class SimpleService extends Service {
 
 	private void alert(String message) {
 		// 使用時間が過ぎていることを警告
-		// TODO
-		Log.i("AlertTest", message);
 		Intent intent = new Intent(getApplicationContext(),
 				CallDialogActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -423,7 +418,6 @@ public class SimpleService extends Service {
 		if (time > limit && onceFlag==0) {
 			alert("一回の利用時間を過ぎています");
 			onceFlag = 1;// make yamada
-			Log.i(TAG, String.valueOf(onceFlag));
 		} else {
 		}
 
@@ -505,7 +499,6 @@ public class SimpleService extends Service {
 	}
 	
 	private void showResult() {
-		Log.i(TAG, String.valueOf(currentWeek));
 		Log.i(TAG, "result day:");
 		for (String app : managedAppNames) {
 			Log.i(app, String.valueOf(getUsageDayLog(app)));
