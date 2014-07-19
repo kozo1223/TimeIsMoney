@@ -45,7 +45,10 @@ public class MyChartView extends ChartView {
         renderer.setSeriesStroke(0, 10f);
         
         // 色
-        renderer.setSeriesPaintType(0, new SolidColor(Color.rgb(166, 227, 157)));
+        if (type == Type.WEEK) 
+        	renderer.setSeriesPaintType(0, new SolidColor(Color.rgb(166, 227, 157)));
+        else
+        	renderer.setSeriesPaintType(0, new SolidColor(Color.rgb(106, 140, 199)));
         
         AFreeChart aFreeChart = new AFreeChart(plot);
         // 最大描写領域を設定

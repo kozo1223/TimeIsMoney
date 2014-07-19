@@ -37,10 +37,12 @@ public class AppDetailActivity extends Activity implements OnClickListener {
 	    myChartView = (MyChartView)findViewById(R.id.sample_chart);
 	    Button btnHour = (Button)findViewById(R.id.buttonHour);
 	    Button btnWeek = (Button)findViewById(R.id.buttonWeek);
+	    Button btnBack = (Button)findViewById(R.id.buttonBack);
 	    
 	    btnHour.setOnClickListener(this);
 	    btnWeek.setOnClickListener(this);
-
+	    btnBack.setOnClickListener(this);
+	    
 	    displayChart(name, Type.WEEK);
 	}
 	
@@ -80,6 +82,9 @@ public class AppDetailActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.buttonWeek:
 			displayChart(name, Type.WEEK);
+			break;
+		case R.id.buttonBack:
+			finish();
 			break;
 		default:
 			break;

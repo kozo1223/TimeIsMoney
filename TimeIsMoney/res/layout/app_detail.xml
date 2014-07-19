@@ -4,31 +4,51 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#FFFFFF" >
-	<LinearLayout 
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-		
-		<Button android:id="@+id/buttonHour"
+    
+    <Button android:id="@+id/buttonBack"
 		    android:textColor="#FFFFFF"
         	android:layout_width="fill_parent"
         	android:layout_height="wrap_content"
         	android:background="@drawable/custom_button_blue"
-        	android:text="Hour" />
+        	android:text="Back" />
     
-   	 	<Button android:id="@+id/buttonWeek"
-   	 	    android:textColor="#FFFFFF"
-        	android:layout_width="fill_parent"
-        	android:layout_height="wrap_content"
-        	android:background="@drawable/custom_button_green"
-        	android:text="Week" />
-       
-	</LinearLayout>
+	<TextView android:id="@+id/textview"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.5" 
+        android:text="無駄遣いXXXX円"
+        android:gravity="center"
+        android:textSize="45dp"/>
     
 	<dev.si.timeismoney.main.MyChartView
        android:id="@+id/sample_chart"
        android:layout_width="wrap_content"
-       android:layout_height="wrap_content"/>
+       android:layout_height = "0dip"
+       android:layout_weight = "1"/>
     
+	<LinearLayout 
+    	android:orientation="horizontal"
+    	android:layout_width="match_parent"
+    	android:layout_height="0dip"
+    	android:layout_weight="0.5"
+    	android:gravity="center">
+		
+		
+   	 	<Button android:id="@+id/buttonWeek"
+   	 	    android:textColor="#FFFFFF"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"  
+        	android:background="@drawable/custom_button_green"
+        	android:text="Week" />
+   	 	
+   	 	<Button android:id="@+id/buttonHour"
+		    android:textColor="#FFFFFF"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"        
+        	android:background="@drawable/custom_button_blue"
+        	android:text="Day" />
+    
+       
+	</LinearLayout>
     
 </LinearLayout>

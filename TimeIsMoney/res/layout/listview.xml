@@ -4,11 +4,17 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
+   <Button android:id="@+id/buttonBack"
+		    android:textColor="#FFFFFF"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:background="@drawable/custom_button_blue"
+        	android:onClick="back"
+        	android:text="Back" />
+   
 <ListView 
     android:id="@+id/MyListView"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    
-
 </ListView>
 </LinearLayout>

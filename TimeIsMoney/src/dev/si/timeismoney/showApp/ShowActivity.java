@@ -137,4 +137,7 @@ public class ShowActivity extends Activity {
 		}
 	}
 
+	public void back(View view) {
+		finish();
+	}
 }
