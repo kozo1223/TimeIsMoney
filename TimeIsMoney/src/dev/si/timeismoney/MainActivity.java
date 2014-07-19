@@ -73,6 +73,15 @@ public class MainActivity extends Activity {
         stopService(i);
     }
     
+    public void onShowApp(View view) {
+        Intent i = new Intent(this, dev.si.timeismoney.showApp.ShowActivity.class);
+        startActivity(i);
+    }
+    public void onShowRegisterApp(View view) {
+        Intent i = new Intent(this, dev.si.timeismoney.showApp.TopActivity.class);
+        startActivity(i);
+    }
+    
     public void onGraphClick(View view) {
         Intent i = new Intent(this, dev.si.timeismoney.main.AppDetailActivity.class);
         i.putExtra("name", "com.android.email");
