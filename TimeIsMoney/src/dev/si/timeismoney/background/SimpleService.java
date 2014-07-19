@@ -66,7 +66,7 @@ public class SimpleService extends Service {
 					public void run() {
 
 						currentApp = getCurrentApp();
-
+						Log.i(TAG, currentApp);
 						// 曜日、もしくは時間帯が変わったらデータ更新
 						if (currentHour != utils.getHourOfDay()) {
 							for (String app : managedAppNames) {
@@ -93,10 +93,10 @@ public class SimpleService extends Service {
 						}
 
 						// 前と同じアプリなら前が対象アプリのみ判定すればいい
-						if (currentApp.equals(prevApp)) {
+						if (currentApp.equals(prevApp) || currentApp.equals("dev.si.timeismoney")) {
 							if (isPrevManaged) {
 								showText("DETECTED"); // demo
-
+								
 								dayLog += INTERVAL;
 								hourLog += INTERVAL;
 
@@ -107,13 +107,10 @@ public class SimpleService extends Service {
 
 								// 制限を超えていないかチェック
 								// make yamada
-								
 									checkSnoozeOnceAlert(snoozeOnceLog,
 											snoozeOnceLimit);
 									checkOnceAndAlert(dayLog - pastDayLog,
 											onceLimit);// 一回の利用制限を超えていないか
-								
-									
 									
 									checkSnoozeDayAlert(snoozeDayLog,
 										snoozeDayLimit);
@@ -147,15 +144,12 @@ public class SimpleService extends Service {
 									pastDayLog = getUsageDayLog(appName);
 									hourLog = getUsageHourLog(appName);
 
-									// comment out yamada
 									dayLog += INTERVAL;
 									hourLog += INTERVAL;
 
 									// 制限を超えていないかチェック
 									checkDayAndAlert(dayLog, dayLimit);
 
-									
-									
 									onceFlag = 0;// make yamada
 									
 
@@ -166,6 +160,7 @@ public class SimpleService extends Service {
 								}
 							}
 							prevApp = currentApp;
+							
 						}
 
 					}
@@ -308,7 +303,7 @@ public class SimpleService extends Service {
 
 	// make yamada 一回警告後のスヌーズを行う
 	private void checkSnoozeOnceAlert(int time, int limit) {
-		if (time > limit && onceFlag==1) {
+		if (time > limit && onceFlag==1 && dayFlag==0) {
 			alert("一回の利用時間過ぎてんねん");
 			snoozeOnceLog = 0;
 		} else {
@@ -392,8 +387,8 @@ public class SimpleService extends Service {
 		this.snoozeOnceLimit = 6;// make yamada
 		this.snoozeOnceLog = 0;// make yamada
 
-		dbManager.insert("com.android.email", 20, 1000);
-		dbManager.insert("com.android.calendar", 20, 1000);
+		dbManager.insert("com.google.android.email", 20, 60);
+		dbManager.insert("com.google.android.calendar", 20, 60);
 
 		this.managedAppNames = this.getManagedAppInfo();
 	}
