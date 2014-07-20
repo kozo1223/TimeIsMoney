@@ -174,20 +174,15 @@ public class MainActivity extends Activity {
 		D.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				String text = day.getText().toString();
-				// TODO
-				int dayLimit = 20*60;
-				if (text != "") {
-					dayLimit = Integer.parseInt(text)*60;	
+				String textDay = day.getText().toString();
+				String textOnce = once.getText().toString();
+				if (!textDay.equals("") && !textDay.equals("")) {
+					int dayLimit = Integer.parseInt(textDay)*60;
+					int onceLimit = Integer.parseInt(textOnce)*60;	
+					dbManager.update(appName, "dayLimit", dayLimit);
+					dbManager.update(appName, "onceLimit", onceLimit);
+					redraw();
 				}
-				int onceLimit = 20*60;
-				text = once.getText().toString();
-				if (text != "") {
-					onceLimit = Integer.parseInt(text)*60;	
-				}
-				dbManager.update(appName, "dayLimit", dayLimit);
-				dbManager.update(appName, "onceLimit", onceLimit);
-				redraw();
 			}
 		});
 
