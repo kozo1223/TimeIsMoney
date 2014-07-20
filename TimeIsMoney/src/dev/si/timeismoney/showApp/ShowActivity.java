@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ShowActivity extends Activity {
 	
@@ -135,6 +136,7 @@ public class ShowActivity extends Activity {
 					onceLimit = Integer.parseInt(text);	
 				}
 				dbManager.insert(appName, dayLimit, onceLimit);
+				Toast.makeText(getApplicationContext(), "登録完了", Toast.LENGTH_SHORT).show();
 			}
 		});
 		D.show();

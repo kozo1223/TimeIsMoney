@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private ListView listView = null;
@@ -186,6 +187,7 @@ public class MainActivity extends Activity {
 				}
 				dbManager.update(appName, "dayLimit", dayLimit);
 				dbManager.update(appName, "onceLimit", onceLimit);
+				Toast.makeText(getApplicationContext(), "変更完了", Toast.LENGTH_SHORT).show();
 			}
 		});
 
