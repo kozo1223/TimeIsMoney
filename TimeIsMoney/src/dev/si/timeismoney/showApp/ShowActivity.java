@@ -6,6 +6,7 @@ import java.util.List;
 import dev.si.timeismoney.R;
 import dev.si.timeismoney.database.DatabaseManager;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ShowActivity extends Activity {
 	
@@ -114,7 +116,9 @@ public class ShowActivity extends Activity {
 		D.setTitle("アプリの登録");
 		D.setView(layout);
 		final EditText day = (EditText)layout.findViewById(R.id.setDay);
+		day.setInputType(InputType.TYPE_CLASS_NUMBER);
 		final EditText once = (EditText)layout.findViewById(R.id.setOnce);
+		once.setInputType(InputType.TYPE_CLASS_NUMBER);
 		D.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -124,6 +128,9 @@ public class ShowActivity extends Activity {
 					int dayLimit = Integer.parseInt(textDay)*60;
 					int onceLimit = Integer.parseInt(textOnce)*60;
 					dbManager.insert(appName, dayLimit, onceLimit);
+					Toast.makeText(getApplicationContext(), "登録完了", Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(getApplicationContext(), "登録できませんでした", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});

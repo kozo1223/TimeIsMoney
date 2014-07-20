@@ -16,6 +16,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private ListView listView = null;
@@ -42,9 +44,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		this.dbManager = new DatabaseManager(getApplicationContext());
 		this.utils = new MyUtils();
-		
 	    setContentView(R.layout.activity_main);
-	
 	}
 	
 	private void setRegisterdAppList(String[] appNames) {
@@ -170,7 +170,9 @@ public class MainActivity extends Activity {
 		D.setView(layout);
 		D.setCancelable(false);
 		final EditText day = (EditText)layout.findViewById(R.id.setDay);
+		day.setInputType(InputType.TYPE_CLASS_NUMBER);
 		final EditText once = (EditText)layout.findViewById(R.id.setOnce);
+		once.setInputType(InputType.TYPE_CLASS_NUMBER);
 		D.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -181,7 +183,10 @@ public class MainActivity extends Activity {
 					int onceLimit = Integer.parseInt(textOnce)*60;	
 					dbManager.update(appName, "dayLimit", dayLimit);
 					dbManager.update(appName, "onceLimit", onceLimit);
+					Toast.makeText(getApplicationContext(), "変更完了", Toast.LENGTH_SHORT).show();
 					redraw();
+				} else {
+					Toast.makeText(getApplicationContext(), "変更できませんでした", Toast.LENGTH_SHORT).show();					
 				}
 			}
 		});
