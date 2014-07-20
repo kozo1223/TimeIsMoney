@@ -7,6 +7,8 @@ import dev.si.timeismoney.R;
 import dev.si.timeismoney.database.DatabaseManager;
 import android.support.v4.app.Fragment;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 public class ShowActivity extends Activity {
@@ -29,7 +32,8 @@ public class ShowActivity extends Activity {
     private DatabaseManager dbManager;
     private List<CustomData> objects;
 
-
+    private View layout; 
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
@@ -68,6 +72,7 @@ public class ShowActivity extends Activity {
     		if(ai.loadLabel(pm).toString()!=null){
     			//アプリ名取得
     			itemData.setTextData(ai.loadLabel(pm).toString());
+    			itemData.setPackageName(ai.packageName);
     		}else{
     			itemData.setTextData("NoName");
     		}
@@ -91,14 +96,40 @@ public class ShowActivity extends Activity {
     			public void onItemClick(AdapterView<?> parent, View view,
     					int position, long id) {
     				//アプリの名前取得
-    				CustomData date = objects.get(position);
-    				dbManager.insert(date.getTextData(),1,1);
+    				CustomData data = objects.get(position);
+    				// dbManager.insert(data.getTextData(),1,1);
+    				onAppClick(data.getPackageName());
     			}
     		});
 
     	}
     }
 	
+    public void onAppClick(final String appName) {
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(LAYOUT_INFLATER_SERVICE);
+		layout = inflater.inflate(R.layout.popupdialog,
+				(ViewGroup) findViewById(R.id.layout_root));
+		AlertDialog.Builder D = new AlertDialog.Builder(this);
+		D.setTitle("アプリの登録");
+		D.setView(layout);
+		final EditText day = (EditText)layout.findViewById(R.id.setDay);
+		final EditText once = (EditText)layout.findViewById(R.id.setOnce);
+		D.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// EditText day = (EditText)findViewById(R.id.setDay);
+				// EditText once = (EditText)findViewById(R.id.setOnce);
+				String text = day.getText().toString();
+				int dayLimit = Integer.parseInt(text);
+				text = once.getText().toString();
+				int onceLimit = Integer.parseInt(text);
+				
+				dbManager.insert(appName, dayLimit, onceLimit);
+			}
+		});
+		D.show();
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
