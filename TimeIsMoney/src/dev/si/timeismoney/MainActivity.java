@@ -16,6 +16,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -166,7 +167,9 @@ public class MainActivity extends Activity {
 		D.setView(layout);
 		
 		final EditText day = (EditText)layout.findViewById(R.id.setDay);
+		day.setInputType(InputType.TYPE_CLASS_NUMBER);
 		final EditText once = (EditText)layout.findViewById(R.id.setOnce);
+		once.setInputType(InputType.TYPE_CLASS_NUMBER);
 		D.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

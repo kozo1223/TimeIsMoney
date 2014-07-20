@@ -6,6 +6,7 @@ import java.util.List;
 import dev.si.timeismoney.R;
 import dev.si.timeismoney.database.DatabaseManager;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -114,7 +115,9 @@ public class ShowActivity extends Activity {
 		D.setTitle("アプリの登録");
 		D.setView(layout);
 		final EditText day = (EditText)layout.findViewById(R.id.setDay);
+		day.setInputType(InputType.TYPE_CLASS_NUMBER);
 		final EditText once = (EditText)layout.findViewById(R.id.setOnce);
+		once.setInputType(InputType.TYPE_CLASS_NUMBER);
 		D.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

@@ -30,6 +30,7 @@
             android:id="@+id/setOnce"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLength="3"
             android:hint="数字を入力" />
 
         <TextView
@@ -56,6 +57,7 @@
             android:id="@+id/setDay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLength="3"
             android:hint="数字を入力" />
 
         <TextView
