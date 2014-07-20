@@ -100,7 +100,8 @@ public class MainActivity extends Activity {
         				public void onItemClick(AdapterView<?> parent, View view,
         						int position, long id) {
         					CustomData data = objects.get(position);
-        					showAppDetail(data.getPackageName());
+        					showAppDetail(data.getPackageName(),data.getTextData());
+        					
         				}
         			});
         			listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -147,9 +148,10 @@ public class MainActivity extends Activity {
         startActivity(i);
     }
 	
-	private void showAppDetail(String appName) {
+	private void showAppDetail(String packageName, String appName) {
         Intent i = new Intent(this, dev.si.timeismoney.main.AppDetailActivity.class);
-        i.putExtra("name", appName);
+        i.putExtra("name", packageName);
+        i.putExtra("appname",appName);
         startActivity(i);
     }
 	
@@ -231,7 +233,7 @@ public class MainActivity extends Activity {
 	private void resultShow() {
 		TextView textResult = (TextView)findViewById(R.id.textResult);
 		String resultText = "";
-		double resultHour = resultTime / 60.0;
+		double resultHour = resultTime / 3600.0;
 		if (resultHour < 0) {
 			resultText = "今週は合計で" + String.valueOf((int)-resultHour*MONEY) + "円無駄にしています！";	
 		} else {
