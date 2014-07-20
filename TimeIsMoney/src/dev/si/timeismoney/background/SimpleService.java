@@ -97,7 +97,7 @@ public class SimpleService extends Service {
 						// 前と同じアプリなら前が対象アプリのみ判定すればいい
 						if (currentApp.equals(prevApp) || currentApp.equals("dev.si.timeismoney")) {
 							if (isPrevManaged) {
-								showText("DETECTED"); // demo
+								// showText("DETECTED"); // demo
 								
 								dayLog += INTERVAL;
 								hourLog += INTERVAL;
@@ -426,7 +426,7 @@ public class SimpleService extends Service {
 	// make yamada 一回警告後のスヌーズを行う
 	private void checkSnoozeOnceAlert(int time, int limit) {
 		if (time > limit && onceFlag==1 && dayFlag==0) {
-			alert("一回の利用時間過ぎてんねん");
+			alert("一回の利用時間過ぎています");
 			snoozeOnceLog = 0;
 		} else {
 		}
@@ -435,7 +435,7 @@ public class SimpleService extends Service {
 	// make yamada 一日警告後のスヌーズを行う
 	private void checkSnoozeDayAlert(int time, int limit) {
 		if (time > limit && dayFlag==1) {
-			alert("一日の利用時間過ぎてんねん");
+			alert("一日の利用時間過ぎています");
 			snoozeDayLog = 0;
 		} else {
 		}

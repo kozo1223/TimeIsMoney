@@ -27,9 +27,20 @@
         	android:background="@drawable/custom_button_green"
         	android:onClick="showAppList"
         	android:text="Add New Application" />
-	<ListView 
-	    android:id="@+id/appListView"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" >
-	</ListView>
+
+    <ListView
+        android:id="@+id/appListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+    </ListView>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="227dp"
+        android:layout_height="34dp"
+        android:layout_gravity="center"
+        android:background="@drawable/koukoku"
+        android:text="広告" />
+
 </LinearLayout>

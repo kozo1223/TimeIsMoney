@@ -18,19 +18,18 @@
         android:gravity="center"
         android:textSize="20sp"
                 />
-        <TextView android:id="@+id/muda"
+    <TextView android:id="@+id/muda"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="20sp"
                 />
-    
-    
-    
+  	<ImageView android:id="@+id/money"
+  	    android:layout_width="wrap_content"
+  	    android:layout_height="wrap_content"
+  	    android:layout_gravity="center"
+  	    />
         
-        
-
-    
 	<dev.si.timeismoney.main.MyChartView
        android:id="@+id/sample_chart"
        android:layout_width="wrap_content"

@@ -10,7 +10,9 @@ import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import dev.si.timeismoney.MainActivity;
 import dev.si.timeismoney.R;
 import dev.si.timeismoney.database.DatabaseManager;
 import dev.si.timeismoney.utils.MyUtils;
@@ -38,7 +40,8 @@ public class AppDetailActivity extends Activity implements OnClickListener {
 		Intent intent = getIntent();
 		this.name = intent.getStringExtra("name");
 		this.appname = intent.getStringExtra("appname");
-
+		ImageView imageView = (ImageView)findViewById(R.id.money);
+		
 		// 初期化
 		myChartView = (MyChartView) findViewById(R.id.sample_chart);
 		Button btnHour = (Button) findViewById(R.id.buttonHour);
@@ -54,6 +57,7 @@ public class AppDetailActivity extends Activity implements OnClickListener {
 
 		// test
 		int result = dbManager.getResultTimeOfWeek(name, utils);
+		setPicture(result, imageView);
 		// int result = -500;
 		double cal;
 		int Money;
@@ -118,6 +122,32 @@ public class AppDetailActivity extends Activity implements OnClickListener {
 			break;
 		default:
 			break;
+		}
+	}
+	
+public void setPicture(int time, ImageView imageView){
+	
+		if(time > 100){
+			
+			// 一万円が増える感じ
+	        imageView.setImageResource(R.drawable.itimanup);
+			
+		}else if(time > 50){
+			
+	        imageView.setImageResource(R.drawable.gosenup);
+			
+		}else if(time >= 0){
+
+			imageView.setImageResource(R.drawable.gohyaku);
+			
+		}else if(time > -50){
+			
+	        imageView.setImageResource(R.drawable.gosendown);
+			
+		}else{
+			
+	        imageView.setImageResource(R.drawable.itimandown);
+
 		}
 	}
 }

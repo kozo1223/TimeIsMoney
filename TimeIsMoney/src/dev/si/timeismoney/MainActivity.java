@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
 		this.utils = new MyUtils();
 		
 	    setContentView(R.layout.activity_main);
-		
+	
 	}
 	
 	private void setRegisterdAppList(String[] appNames) {
