@@ -25,33 +25,34 @@ public final class R {
         public static final int custom_button_blue=0x7f020000;
         public static final int custom_button_green=0x7f020001;
         public static final int ic_launcher=0x7f020002;
+        public static final int koukoku=0x7f020003;
     }
     public static final class id {
         public static final int MyListView=0x7f080012;
         public static final int action_settings=0x7f080019;
         public static final int appListView=0x7f080003;
         public static final int appname=0x7f080014;
-        public static final int backbutton=0x7f080004;
-        public static final int btnGraph=0x7f08000f;
-        public static final int btnShowApp=0x7f080010;
-        public static final int btnStart=0x7f08000d;
-        public static final int btnStop=0x7f08000e;
-        public static final int button1=0x7f080011;
+        public static final int backbutton=0x7f080005;
+        public static final int btnGraph=0x7f080010;
+        public static final int btnShowApp=0x7f080011;
+        public static final int btnStart=0x7f08000e;
+        public static final int btnStop=0x7f08000f;
+        public static final int button1=0x7f080004;
         public static final int buttonAdd=0x7f080002;
-        public static final int buttonBack=0x7f080006;
-        public static final int buttonHour=0x7f08000a;
-        public static final int buttonWeek=0x7f080009;
+        public static final int buttonBack=0x7f080007;
+        public static final int buttonHour=0x7f08000b;
+        public static final int buttonWeek=0x7f08000a;
         public static final int daylimit=0x7f080017;
-        public static final int image=0x7f08000b;
+        public static final int image=0x7f08000c;
         public static final int layout_root=0x7f080013;
         public static final int oncelimit=0x7f080015;
-        public static final int registerapl=0x7f080005;
-        public static final int sample_chart=0x7f080008;
+        public static final int registerapl=0x7f080006;
+        public static final int sample_chart=0x7f080009;
         public static final int setDay=0x7f080018;
         public static final int setOnce=0x7f080016;
-        public static final int text=0x7f08000c;
+        public static final int text=0x7f08000d;
         public static final int textView1=0x7f080001;
-        public static final int textview=0x7f080007;
+        public static final int textview=0x7f080008;
         public static final int webView=0x7f080000;
     }
     public static final class layout {
