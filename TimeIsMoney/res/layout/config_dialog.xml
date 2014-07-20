@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/oncelimit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1回上限は" >
+        </TextView>
+
+        <EditText
+            android:id="@+id/setOnce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="数字を入力" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="分" >
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/daylimit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/oncelimit"
+
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1日上限は" >
+        </TextView>
+
+        <EditText
+            android:id="@+id/setDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="数字を入力" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="分" />
+    </LinearLayout>
+
+</RelativeLayout>

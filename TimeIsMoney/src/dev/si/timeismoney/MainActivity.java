@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -155,11 +156,58 @@ public class MainActivity extends Activity {
 	public void onAppClick(final String appName) {
 		LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.config_dialog,
+				(ViewGroup) findViewById(R.id.layout_root));
+		AlertDialog.Builder D = new AlertDialog.Builder(this);
+		D.setTitle("アプリの設定");
+		D.setMessage("一日の制限、一回の制限を設定して下さい。削除したい場合は削除ボタンを押して下さい。");
+		D.setView(layout);
+		
+		final EditText day = (EditText)layout.findViewById(R.id.setDay);
+		final EditText once = (EditText)layout.findViewById(R.id.setOnce);
+		D.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				String text = day.getText().toString();
+				// TODO
+				int dayLimit = 20;
+				if (text != "") {
+					dayLimit = Integer.parseInt(text);	
+				}
+				int onceLimit = 20;
+				text = once.getText().toString();
+				if (text != "") {
+					onceLimit = Integer.parseInt(text);	
+				}
+				dbManager.update(appName, "dayLimit", dayLimit);
+				dbManager.update(appName, "onceLimit", onceLimit);
+			}
+		});
+
+		D.setNegativeButton("削除", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				confirmDelete(appName);
+			}
+		});
+		
+		D.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+			}
+		});
+		D.show();
+	}
+	
+	private void confirmDelete(final String appName) {
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(LAYOUT_INFLATER_SERVICE);
 		View layout = inflater.inflate(R.layout.delete_popup_dialog,
 				(ViewGroup) findViewById(R.id.layout_root));
 		AlertDialog.Builder D = new AlertDialog.Builder(this);
-		D.setTitle("アプリを削除");
-		D.setMessage("本当にこのアプリを管理対象から外しますか？");
+		D.setTitle("アプリの削除");
+		D.setMessage("本当にアプリを管理対象から外しますか？");
 		D.setView(layout);
 		
 		D.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -170,6 +218,7 @@ public class MainActivity extends Activity {
 				setRegisterdAppList(appNames);
 			}
 		});
+		
 		D.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -184,9 +233,9 @@ public class MainActivity extends Activity {
 		String resultText = "";
 		double resultHour = resultTime / 60.0;
 		if (resultHour < 0) {
-			resultText = "今週は合計で" + String.valueOf((int)-resultHour*MONEY) + "円の損！";	
+			resultText = "今週は合計で" + String.valueOf((int)-resultHour*MONEY) + "円無駄にしています！";	
 		} else {
-			resultText = "今週は合計で" + String.valueOf((int)(resultHour*MONEY)) + "円の得！";
+			resultText = "今週は合計で" + String.valueOf((int)(resultHour*MONEY)) + "円節約しています！";
 		}
 		textResult.setText(resultText);
 	}
