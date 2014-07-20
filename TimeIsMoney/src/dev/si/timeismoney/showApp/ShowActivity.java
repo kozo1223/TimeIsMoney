@@ -122,14 +122,14 @@ public class ShowActivity extends Activity {
 				// EditText once = (EditText)findViewById(R.id.setOnce);
 				String text = day.getText().toString();
 				// TODO
-				int dayLimit = 20;
+				int dayLimit = 20*60;
 				if (text != "") {
-					dayLimit = Integer.parseInt(text);	
+					dayLimit = Integer.parseInt(text)*60;	
 				}
-				int onceLimit = 20;
+				int onceLimit = 20*60;
 				text = once.getText().toString();
 				if (text != "") {
-					onceLimit = Integer.parseInt(text);	
+					onceLimit = Integer.parseInt(text)*60;	
 				}
 				dbManager.insert(appName, dayLimit, onceLimit);
 			}

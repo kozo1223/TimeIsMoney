@@ -135,7 +135,7 @@ public class SimpleService extends Service {
 							// アプリが変わったので対象アプリか判定する
 							for (String appName : managedAppNames) {
 								if (currentApp.contains(appName)) {
-									showText("DETECTED"); // demo
+									// showText("DETECTED"); // demo
 
 									// データ入れ替え
 									onceLimit = getOnceLimit(appName);
@@ -232,9 +232,9 @@ public class SimpleService extends Service {
         this.managedAppNames = this.getManagedAppInfo();    
         this.onceFlag = 0;// make yamada
 		this.dayFlag = 0;// make yamada
-		this.snoozeDayLimit = 6;// make yamada
+		this.snoozeDayLimit = 3*60;// make yamada
 		this.snoozeDayLog = 0;// make yamada
-		this.snoozeOnceLimit = 6;// make yamada
+		this.snoozeOnceLimit = 3*60;// make yamada
 		this.snoozeOnceLog = 0;// make yamada         
     }
     

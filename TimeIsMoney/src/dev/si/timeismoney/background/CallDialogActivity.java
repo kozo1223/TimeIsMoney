@@ -17,6 +17,7 @@ public class CallDialogActivity extends Activity {
         Bundle myBundle = intent.getExtras();
         String message = myBundle.getString("overTime");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
         builder.setTitle(message).setNegativeButton("OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

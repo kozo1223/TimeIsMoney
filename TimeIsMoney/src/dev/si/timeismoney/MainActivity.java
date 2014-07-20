@@ -121,6 +121,10 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		stopService();
+		redraw();
+	}
+	
+	private void redraw() {
 		resultTime = 0;
 		final String appNames[] = dbManager.appNames();
 		setRegisterdAppList(appNames);
@@ -164,7 +168,7 @@ public class MainActivity extends Activity {
 		D.setTitle("アプリの設定");
 		D.setMessage("一日の制限、一回の制限を設定して下さい。削除したい場合は削除ボタンを押して下さい。");
 		D.setView(layout);
-		
+		D.setCancelable(false);
 		final EditText day = (EditText)layout.findViewById(R.id.setDay);
 		final EditText once = (EditText)layout.findViewById(R.id.setOnce);
 		D.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -172,17 +176,18 @@ public class MainActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				String text = day.getText().toString();
 				// TODO
-				int dayLimit = 20;
+				int dayLimit = 20*60;
 				if (text != "") {
-					dayLimit = Integer.parseInt(text);	
+					dayLimit = Integer.parseInt(text)*60;	
 				}
-				int onceLimit = 20;
+				int onceLimit = 20*60;
 				text = once.getText().toString();
 				if (text != "") {
-					onceLimit = Integer.parseInt(text);	
+					onceLimit = Integer.parseInt(text)*60;	
 				}
 				dbManager.update(appName, "dayLimit", dayLimit);
 				dbManager.update(appName, "onceLimit", onceLimit);
+				redraw();
 			}
 		});
 
@@ -211,13 +216,12 @@ public class MainActivity extends Activity {
 		D.setTitle("アプリの削除");
 		D.setMessage("本当にアプリを管理対象から外しますか？");
 		D.setView(layout);
-		
+		D.setCancelable(false);
 		D.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dbManager.delete(appName);
-				final String appNames[] = dbManager.appNames();
-				setRegisterdAppList(appNames);
+				redraw();
 			}
 		});
 		
