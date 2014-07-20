@@ -6,16 +6,22 @@ import java.util.List;
 import dev.si.timeismoney.database.DatabaseManager;
 import dev.si.timeismoney.showApp.CustomAdapter;
 import dev.si.timeismoney.showApp.CustomData;
+import dev.si.timeismoney.utils.MyUtils;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	private ListView listView = null;
@@ -24,6 +30,9 @@ public class MainActivity extends Activity {
 	private CustomAdapter customAdapater;
     private DatabaseManager dbManager;
     private List<CustomData> objects;
+    private int resultTime;
+    private MyUtils utils;
+    private static final int MONEY = 1037;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +40,8 @@ public class MainActivity extends Activity {
 		//データベース初期化
 		super.onCreate(savedInstanceState);
 		this.dbManager = new DatabaseManager(getApplicationContext());
+		this.utils = new MyUtils();
+		
 	    setContentView(R.layout.activity_main);
 		
 	}
@@ -60,7 +71,8 @@ public class MainActivity extends Activity {
         		itemData = new CustomData();
         		// インストールされているアプリのみ表示
         		if (ai.packageName.equals(appName)){
-        			itemData.setPackageName(ai.packageName);
+        			itemData.setPackageName(ai.packageName); // パッケージ名登録
+        			resultTime += dbManager.getResultTimeOfWeek(ai.packageName, utils); // 合計時間測定 
         			if(ai.loadLabel(pm).toString()!=null){
         				//アプリ名取得
         				itemData.setTextData(ai.loadLabel(pm).toString());
@@ -90,6 +102,14 @@ public class MainActivity extends Activity {
         					showAppDetail(data.getPackageName());
         				}
         			});
+        			listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        				@Override
+        				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        					CustomData data = objects.get(position);
+            				onAppClick(data.getPackageName());
+        					return true;
+        				}
+					});
 
         		}
         	}}
@@ -99,8 +119,10 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		stopService();
+		resultTime = 0;
 		final String appNames[] = dbManager.appNames();
 		setRegisterdAppList(appNames);
+		resultShow();
 	}
 	
 	@Override
@@ -130,4 +152,44 @@ public class MainActivity extends Activity {
         startActivity(i);
     }
 	
+	public void onAppClick(final String appName) {
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.delete_popup_dialog,
+				(ViewGroup) findViewById(R.id.layout_root));
+		AlertDialog.Builder D = new AlertDialog.Builder(this);
+		D.setTitle("アプリを削除");
+		D.setMessage("本当にこのアプリを管理対象から外しますか？");
+		D.setView(layout);
+		
+		D.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dbManager.delete(appName);
+				final String appNames[] = dbManager.appNames();
+				setRegisterdAppList(appNames);
+			}
+		});
+		D.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+			}
+		});
+		D.show();
+	}
+	
+	private void resultShow() {
+		TextView textResult = (TextView)findViewById(R.id.textResult);
+		String resultText = "";
+		double resultHour = resultTime / 60.0;
+		if (resultHour < 0) {
+			resultText = "今週は合計で" + String.valueOf((int)-resultHour*MONEY) + "円の損！";	
+		} else {
+			resultText = "今週は合計で" + String.valueOf((int)(resultHour*MONEY)) + "円の得！";
+		}
+		textResult.setText(resultText);
+	}
+	
+
 }

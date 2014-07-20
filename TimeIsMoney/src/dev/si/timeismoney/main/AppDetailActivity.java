@@ -42,7 +42,8 @@ public class AppDetailActivity extends Activity implements OnClickListener {
 	    btnHour.setOnClickListener(this);
 	    btnWeek.setOnClickListener(this);
 	    btnBack.setOnClickListener(this);
-	    
+	    // test
+	    int result = dbManager.getResultTimeOfWeek(name, utils);
 	    displayChart(name, Type.WEEK);
 	}
 	

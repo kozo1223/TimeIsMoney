@@ -224,8 +224,8 @@ public class SimpleService extends Service {
         this.isPrevManaged = false;
         this.pastDayLog = 0;
         this.utils = new MyUtils();
-        dbManager.insert("com.android.email", 20, 60);
-        dbManager.insert("com.android.calendar", 20, 60);
+//        dbManager.insert("com.android.email", 20, 60);
+//        dbManager.insert("com.android.calendar", 20, 60);
         this.currentWeek = this.utils.getDayOfWeek();
         this.currentHour = this.utils.getHourOfDay();
         this.prefManager = new PreferencesManager(getApplicationContext());

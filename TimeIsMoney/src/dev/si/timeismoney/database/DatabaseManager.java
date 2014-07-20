@@ -3,6 +3,9 @@ package dev.si.timeismoney.database;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.afree.data.time.Week;
+
+import dev.si.timeismoney.utils.MyUtils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -146,5 +149,15 @@ public class DatabaseManager {
             Log.i("Database Message" , "Delete Success :"+appName);
         }
 
+    }
+    
+    public int getResultTimeOfWeek(String appName, MyUtils utils) {
+    	int result = 0;
+    	int dayLimit;
+    	dayLimit = select(appName, "dayLimit");
+    	for	(int week = 1; week <= 7; week++) {
+    		result += dayLimit - select(appName, utils.week2Col(week));
+    	}
+    	return result;
     }
 }
