@@ -87,7 +87,8 @@ public class MainActivity extends Activity {
         				public void onItemClick(AdapterView<?> parent, View view,
         						int position, long id) {
         					CustomData data = objects.get(position);
-        					showAppDetail(data.getPackageName());
+        					showAppDetail(data.getPackageName(),data.getTextData());
+        					
         				}
         			});
 
@@ -124,9 +125,10 @@ public class MainActivity extends Activity {
         startActivity(i);
     }
 	
-	private void showAppDetail(String appName) {
+	private void showAppDetail(String packageName, String appName) {
         Intent i = new Intent(this, dev.si.timeismoney.main.AppDetailActivity.class);
-        i.putExtra("name", appName);
+        i.putExtra("name", packageName);
+        i.putExtra("appname",appName);
         startActivity(i);
     }
 	
