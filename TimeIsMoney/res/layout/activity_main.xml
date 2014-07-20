@@ -4,6 +4,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
+    <ImageView
+        android:id="@+id/money"
+        android:layout_width="120dp"
+        android:layout_height="81dp"
+        android:gravity = "center"
+        android:src="@drawable/custom_button_blue" />
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
@@ -23,9 +30,8 @@
     <ListView
         android:id="@+id/appListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" 
-         android:layout_weight="1"
-        >
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
     </ListView>
 
     <Button

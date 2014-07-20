@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 public class TopActivity extends Activity {
@@ -28,13 +29,16 @@ public class TopActivity extends Activity {
 	private CustomAdapter customAdapater;
     private DatabaseManager dbManager;
     private List<CustomData> objects;
-
+    private DesignMoney money;
 	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		//データベース初期化
+		
+		
+		
 		
 		super.onCreate(savedInstanceState);
 		

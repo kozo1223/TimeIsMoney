@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		this.dbManager = new DatabaseManager(getApplicationContext());
 	    setContentView(R.layout.activity_main);
-		
+	
 	}
 	
 	private void setRegisterdAppList(String[] appNames) {
